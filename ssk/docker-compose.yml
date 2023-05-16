@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  ss:
+    container_name: ss
+    image: shadowsocks/shadowsocks-libev
+    restart: always
+    ports:
+      - "18388:8388"
+      - "18388:8388/udp"
+    environment:
+      - METHOD=chacha20-ietf-poly1305
+      - PASSWORD=xxxxx修改为自己的密码
+    restart: always
+  kcptun:
+    container_name: kcptun
+    image: xtaci/kcptun
+    restart: always
+    depends_on:
+      - ss
+    ports:
+      - "24406:24406/udp"
+      - "24407:24406/udp"
+      - "24408:24406/udp"
+      - "24409:24406/udp"
+      - "24410:24406/udp"
+    command: server --key "xxxxx修改为自己的密码" --crypt aes -l ":24406" -t "ss:8388" -mode fast3 -ds 10 -ps 3 -nocomp -dscp 46

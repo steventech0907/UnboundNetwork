@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ssr:
+    image: teddysun/shadowsocks-r
+    container_name: ssr
+    restart: always
+    volumes:
+      - ./config.json:/etc/shadowsocks-r/config.json
+    ports:
+      - "20023:20023"
+      - "20023:20023/udp"

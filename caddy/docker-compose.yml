@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  caddy:
+    container_name: caddy-gateway
+    image: caddy
+    volumes:
+      - ./data/:/data/caddy/
+      - ./log/:/var/log/
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always

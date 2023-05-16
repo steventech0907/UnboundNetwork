@@ -1,0 +1,25 @@
+xxx.com // TODO 修改为自己的域名 {
+    reverse_proxy /p xray:1088 { 
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+
+   reverse_proxy /w xray:1099 { 
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+    
+    redir / https://www.youtube.com
+   
+    log {
+        output file /var/log/access.log {
+                roll_size 1gb
+                roll_keep 5
+                roll_keep_for 720h
+        }
+    }
+}

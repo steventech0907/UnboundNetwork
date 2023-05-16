@@ -1,0 +1,22 @@
+version: '3'
+services:
+  xray:
+    image: teddysun/xray:1.7.5
+    container_name: xray
+    restart: always
+    volumes:
+      - ./log/:/var/log/xray/
+      - ./config.json:/etc/xray/config.json
+      - /root/caddy/data/certificates/acme-v02.api.letsencrypt.org-directory/xxx.com修改为域名/:/root/xray/cert/
+    ports:
+      - "1088:1088"
+      - "1088:1088/udp"
+      - "1095:1091"
+      - "1096:1096"
+      - "1099:1099"
+      - "1099:1099/udp"
+networks:
+  default:
+    external:
+      name: caddy_default
+  

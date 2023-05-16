@@ -1,0 +1,133 @@
+{
+    "log": {
+        "loglevel": "debug",
+        "access": "/var/log/xray/access.log",
+        "error": "/var/log/xray/error.log"
+    },
+    "inbounds": [
+        {
+            "port": 1096,
+            "protocol": "vless",
+            "settings": {
+                "decryption": "none",
+                "clients": [
+                    {
+                        "id": "0635a923-184b-4c9e-9cf8-f650768bf398",
+                        "flow": "xtls-rprx-direct",
+                        "level": 0,
+                        "email": "xray@gmail.com"
+                    }
+                ],
+                "fallbacks": [
+                    {
+                        "dest": 80
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "xtls",
+                "xtlsSettings": {
+                    "alpn": [
+                        "http/1.1"
+                    ],
+                    "certificates": [
+                        {
+                            "certificateFile": "/root/xray/cert/xxx.com修改为域名.crt",
+                            "keyFile": "/root/xray/cert/xxx.com.key"
+                        }
+                    ]
+                }
+            },
+            "listen": "0.0.0.0"
+        },
+        {
+            "listen": "0.0.0.0",
+            "port": 1099,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "0635a923-184b-4c9e-9cf8-f650768bf398"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "path": "/w",
+                    "headers": {
+                        "Host": "xxx.com修改为域名"
+                    }
+                }
+            }
+        },
+        {
+            "port": 1091,
+            "protocol": "vless",
+            "settings": {
+                "decryption": "none",
+                "clients": [
+                    {
+                        "id": "0635a923-184b-4c9e-9cf8-f650768bf398",
+                        "flow": "xtls-rprx-vision",
+                        "level": 0,
+                        "email": "xray@gmail.com"
+                    }
+                ],
+                "fallbacks": [
+                    {
+                        "dest": 80
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "alpn": [
+                        "http/1.1"
+                    ],
+                    "certificates": [
+                        {
+                            "certificateFile": "/root/xray/cert/xxx.com修改为域名.crt",
+                            "keyFile": "/root/xray/cert/xxx.com修改为域名.key"
+                        }
+                    ]
+                }
+            },
+            "listen": "0.0.0.0"
+        },
+        {
+            "port": 1088,
+            "listen": "0.0.0.0",
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "0635a923-184b-4c9e-9cf8-f650768bf398",
+                        "level": 0
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "path": "/p",
+                    "headers": {
+                        "Host": "xxx.com修改为域名"
+                    }
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {}
+        }
+    ]
+}

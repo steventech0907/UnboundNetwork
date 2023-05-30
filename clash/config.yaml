@@ -1,0 +1,111 @@
+#---------------------------------------------------#
+## 配置文件需要放置在 $HOME/.config/clash/*.yaml
+
+## 这份文件是clashX的基础配置文件，请尽量新建配置文件进行修改。
+## ！！！只有这份文件的端口设置会随ClashX启动生效
+
+## 如果您不知道如何操作，请参阅 官方Github文档 https://github.com/Dreamacro/clash/blob/dev/README.md
+#---------------------------------------------------#
+
+# (HTTP and SOCKS5 in one port)
+mixed-port: 7890
+# RESTful API for clash
+external-controller: 127.0.0.1:9090
+allow-lan: false
+mode: rule
+log-level: warning
+
+proxies:
+
+# v2ray配置
+- name: 'v2ray'
+  server: ip
+  port: port
+  type: vmess
+  uuid: xxxx
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: ws
+  ws-opts: 
+    path: /t
+    headers: 
+      Host: domain
+
+# ssr配置
+- { name: ssr, server: 45.79.69.184, port: 20023, type: ssr, cipher: aes-256-cfb, password: xxxxx, protocol: auth_aes128_md5, obfs: tls1.2_ticket_auth, protocol-param: "", obfs-param: ""}
+
+- { name: v2ray-openai-us, type: vmess, server: md.01.qingyun.in, port: 51012, uuid: xxxxx, alterId: 0, cipher: auto, udp: true, tls: true, skip-cert-verify: true, network: ws, ws-opts: { path: /chianokokpas, headers: { Host: us.02.qingyun.in } }, ws-path: /chianokokpas, ws-headers: { Host: us.02.qingyun.in } }
+
+proxy-groups:
+  # 代理节点选择
+- name: "PROXY"
+  type: select
+  proxies:
+    - "v2ray"
+    - "ssr"
+    - "alilang"
+- name : "OpenAI"
+  type: select
+  proxies:
+    - "v2ray-openai-us"
+    - "alilang"
+
+rules:
+  - DOMAIN-SUFFIX,alibaba-inc.com,DIRECT
+  - DOMAIN-KEYWORD,alibaba,DIRECT
+  - DOMAIN-SUFFIX,civitai.com,PROXY
+  - DOMAIN-KEYWORD,civitai,PROXY
+  # Google直接连接
+  - DOMAIN-SUFFIX,google.com,PROXY
+  - DOMAIN-KEYWORD,google,PROXY
+  # Github直接连接
+  - DOMAIN-SUFFIX,github.com,PROXY
+  - DOMAIN-KEYWORD,github,PROXY
+  - DOMAIN-SUFFIX,githubassets.com,PROXY
+  - DOMAIN-KEYWORD,githubusercontent,PROXY
+  # Youtube直接连接
+  - DOMAIN-SUFFIX,youtube.com,PROXY
+  - DOMAIN-KEYWORD,youtube,PROXY
+  # Linode
+  - DOMAIN-SUFFIX,linode.com,PROXY
+  - DOMAIN-KEYWORD,linode,PROXY
+  # OpenAI
+  - DOMAIN-SUFFIX,openai.com,OpenAI
+  - DOMAIN-KEYWORD,openai,OpenAI
+  # Slack
+  - DOMAIN-SUFFIX,slack.com,PROXY
+  - DOMAIN-KEYWORD,slack,PROXY
+  - DOMAIN-SUFFIX,bing.com,PROXY
+  - DOMAIN-SUFFIX,ytimg.com,DIRECT
+  - DOMAIN-SUFFIX,ggpht.com,DIRECT
+  - DOMAIN-SUFFIX,ad.com,REJECT
+  - DOMAIN-SUFFIX,huggingface.co,OpenAI
+  - DOMAIN-KEYWORD,huggingface.co,OpenAI
+  - GEOIP,CN,DIRECT
+  - MATCH,DIRECT
+
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  enhanced-mode: redir-host
+  nameserver:
+    - 30.30.30.30
+    - 8.8.8.8
+  fallback:
+    - 'tls://1.1.1.1'
+    - 'tls://dns.google'
+
+# dns:
+#     enable: true
+#     ipv6: false
+#     default-nameserver: [223.5.5.5, 119.29.29.29]
+#     enhanced-mode: fake-ip
+#     fake-ip-range: 198.18.0.1/16
+#     use-hosts: true
+#     nameserver: ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query']
+#     fallback: ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853']
+#     fallback-filter: { geoip: true, ipcidr: [240.0.0.0/4, 0.0.0.0/32] }
+
+
+

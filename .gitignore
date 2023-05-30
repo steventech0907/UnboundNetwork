@@ -21,3 +21,4 @@ build/
 nbbuild/
 dist/
 nbdist/
+*DS_Store

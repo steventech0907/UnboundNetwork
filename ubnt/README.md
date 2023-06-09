@@ -1,11 +1,4 @@
-# gfwlist2dnsmasq
-A shell script which convert gfwlist into dnsmasq rules.
-
-Working on both Linux-based (Debian/Ubuntu/Cent OS/OpenWrt/LEDE/Cygwin/Bash on Windows/etc.) and BSD-based (FreeBSD/Mac OS X/etc.) system.
-
-This script needs `sed`, `base64`, `curl`(or`wget`). You should have these binaries on you system.
-
-### Usage
+## 1. gfwlist convert
 ```
 sh gfwlist2dnsmasq.sh [options] -o FILE
 Valid options are:
@@ -33,46 +26,29 @@ Valid options are:
     -h, --help  Usage
 ```
 
-### OpenWRT Usage
-
-( For LEDE 17.01/ OpenWrt 18.06 and later)
-
-To download gfwlist `curl` or `wget` is needed. Because the connection is HTTPS, if you use busybox `wget`, you need to install `libustream-openssl` or `libustream-mbedtls` to support it, otherwise use GNU `wget`.
-
-Because gfwlist is encoded by BASE64, `base64` is needed to decode.
-
-```
-# curl
-opkg update
-opkg install curl coreutils-base64
-# busybox wget (default by OpenWrt)
-opkg update
-opkg install libustream-mbedtls coreutils-base64
-# GNU wget
-opkg update
-opkg install wget coreutils-base64
-```
-
-For security reason, this script won't bypass HTTPS certificate validation. So you should install ca-certificates and ca-bundle in addition.
-
-```
-opkg update
-opkg install ca-certificates ca-bundle
-```
-
 If you really want to bypass the certificate validation, use '-i' or '--insecure' option. You should know this is insecure.
 
-### Generated Configuration Files [![Build Status](https://travis-ci.org/cokebar/gfwlist2dnsmasq.svg?branch=master)](https://travis-ci.org/cokebar/gfwlist2dnsmasq)
+## 2.Ubuntu Usage
 
-If you don't want to generate dnsmasq configuration file by yourself, you can directly download them:
-
-- gfwlist to dnsmasq rule file without ipset: https://cokebar.github.io/gfwlist2dnsmasq/dnsmasq_gfwlist.conf
-
-- gfwlist to dnsmasq rule file with ipset: https://cokebar.github.io/gfwlist2dnsmasq/dnsmasq_gfwlist_ipset.conf
-
-- gfwlist to domain list file: https://cokebar.github.io/gfwlist2dnsmasq/gfwlist_domain.txt
-
-
-
-### Ubuntu Usage
+```
 sh gfwlist2dnsmasq.sh -o ./gfwlist.conf -s gfwlist
+```
+
+## 3.Hardware nat enable
+```
+# 查看硬件nat的开启状态
+show ubnt offload
+```
+
+```
+# 开启硬件nat
+configure
+set system offload hwnat enable
+commit
+save
+```
+
+```
+重启设备
+sudo reboot
+```

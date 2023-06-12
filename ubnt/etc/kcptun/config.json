@@ -1,0 +1,22 @@
+{
+    "localaddr": "8488",
+    "remoteaddr": "45.62.127.9:29900",
+    "key": "xxxx",
+    "crypt": "aes",
+    "mode": "fast3",
+    "mtu": 1350,
+    "log":"/var/log/kcptun.log",
+    "sndwnd": 1024,
+    "rcvwnd": 1024,
+    "datashard": 5,
+    "parityshard": 5,
+    "dscp": 46,
+    "nocomp": true,
+    "acknodelay": false,
+    "nodelay": 0,
+    "interval": 40,
+    "resend": 0,
+    "nc": 0,
+    "sockbuf": 16777217,
+    "keepalive": 10
+  }

@@ -1,0 +1,111 @@
+{
+    "inbounds": [
+        {
+            "tag": "socks",
+            "port": 1080,
+            "listen": "0.0.0.0",
+            "protocol": "socks",
+            "settings": {
+                "udp": true
+            }
+        },
+        {
+            "tag": "all-in",
+            "port": 1234,
+            "protocol": "dokodemo-door",
+            "settings": {
+                "network": "tcp,udp",
+                "followRedirect": true
+            }
+        },
+        {
+            "tag": "dns-in",
+            "port": 5353,
+            "protocol": "dokodemo-door",
+            "settings": {
+                "network": "tcp,udp",
+                "address": "8.8.8.8",
+                "port": 53
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "tag": "proxy",
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "hostname",
+                        "port": 1095,
+                        "users": [
+                            {
+                                "id": "xxxxx",
+                                "flow": "xtls-rprx-vision",
+                                "encryption": "none",
+                                "level": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "hostname"
+                }
+            }
+        },
+        {
+            "tag": "dns-out",
+            "protocol": "dns",
+            "settings": {
+                "address": "8.8.8.8"
+            },
+            "proxySettings": {
+                "tag": "proxy"
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "mark": 2
+                }
+            }
+        }
+    ],
+    "dns": {
+        "queryStrategy": "UseIPv4",
+        "hosts": {},
+        "servers": [
+            "8.8.8.8",
+            "1.1.1.1",
+            "https+local://doh.dns.sb/dns-query"
+        ]
+    },
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "type": "field",
+                "inboundTag": [
+                    "dns-in"
+                ],
+                "outboundTag": "dns-out"
+            },
+            {
+                "type": "field",
+                "inboundTag": [
+                    "all-in"
+                ],
+                "outboundTag": "proxy"
+            },
+            {
+                "type": "field",
+                "inboundTag": [
+                    "socks"
+                ],
+                "outboundTag": "proxy"
+            }
+        ]
+    }
+}
